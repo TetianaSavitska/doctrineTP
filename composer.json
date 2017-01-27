@@ -1,0 +1,17 @@
+{
+    "name": "root/doctrine-tp",
+    "authors": [
+        {
+            "name": "Tetiana Savitska",
+            "email": "savitska.tetiana@gmail.com"
+        }
+    ],
+    "require": {
+        "doctrine/orm": "^2.5"
+    },
+    "autoload": {
+        "psr-4": { 
+            "ImieBook\\": "src/" 
+        }
+    }
+}
