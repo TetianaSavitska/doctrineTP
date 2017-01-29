@@ -2,6 +2,7 @@
 
 require "../vendor/autoload.php";
 require "../bootstrap.php";
+session_start();
 
 //if update is set get the data to modify
 $button= "Post";
@@ -103,15 +104,21 @@ if(!empty($_GET) && !empty($_GET['search-word'])){
                                 </div>
                             </form>
                             <ul class="nav navbar-nav">
-                                <li>
-                                    <a href="post.php">Home</a>
-                                </li>
-                                <li>
-                                    <a href="login.php"><span class="glyphicon glyphicon-user"></span></a>
-                                </li>
-                                <li>
-                                    <a href="register.php"><span class="glyphicon glyphicon-log-in"></span></a>
-                                </li>
+                                <?php if (!empty($_SESSION['user'])): ?>
+                                    <li>
+                                        <a href="post.php">Home</a>
+                                    </li>
+                                    <li title="Logout">
+                                        <a href="login.php"><span  class="glyphicon glyphicon-user"></span>Logout</a>
+                                    </li>
+                                <?php else: ?>
+                                    <li title="Login">
+                                        <a href="login.php"><span  class="glyphicon glyphicon-user"></span>Login</a>
+                                    </li>
+                                    <li title="Sign Up">
+                                        <a href="register.php"><span  class="glyphicon glyphicon-log-in"></span></a>
+                                    </li>
+                                <?php endif; ?>
                             </ul>
                         </nav>
                     </div>
@@ -126,7 +133,7 @@ if(!empty($_GET) && !empty($_GET['search-word'])){
                                 <!-- main col left -->
                                 <div class="col-sm-5">
                                     <div class="well">
-                                        <form class="form-horizontal" role="form" method="POST" action="post.php?id=<?=$id_modif?>&update=true">
+                                        <form class="form-horizontal" role="form" method="POST" action="post.php?id=<?=$id_modif?>&update=<?=$mod?>">
                                             <h4>What's New</h4>
                                             <div class="form-group" style="padding:14px;">
                                                 <input type="text" class="form-control" name="title" placeholder="Title" value="<?=$mod ? $subject : ''?>"/>
@@ -144,9 +151,10 @@ if(!empty($_GET) && !empty($_GET['search-word'])){
                                         <div class="panel panel-default">
                                             <div class="panel-heading"> 
                                                 <a href="comment.php?id=<?=$post->getId()?>" class="pull-right btn btn-default btn-sm">
-                                                Link
+                                                Link 
                                                 </a>
                                                 <h4><a href="comment.php?id=<?=$post->getId()?>"><?=$post->getSubject()?></a></h4>
+                                                <p> Posted by <?=$post->getAuthor()->getFirstname() . " " . $post->getAuthor()->getLastname() ?></p>
                                                 <?=$post->getDate()->format('Y-m-d H:i:s');?>
                                             </div>
                                             <div class="panel-body">

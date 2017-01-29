@@ -23,6 +23,17 @@ class Post
     /** @Column(name="message", type="text") */
     private $message;
 
+    /** @ManyToOne(targetEntity="User") */
+    private $author;
+
+    ///** @OneToMany(targetEntity="Comment", mappedBy="post") */
+    //private $comments;
+
+    /*public function __construct()
+    {
+        $this->comments = new ArrayCollection();
+    }*/
+
     public function getId(){
         return $this->id;
     }
@@ -54,16 +65,12 @@ class Post
     public function setMessage($message){
         $this->message = $message;
     }
-}
 
-/*class PostRepository extends \Doctrine\ORM\EntityRepository
-{
-    public function getAll()
-    {
-        return $this
-        ->createQueryBuilder('t')
-        ->getQuery()
-        ->getResult()
-        ;
+    public function getAuthor(){
+        return $this->author;
     }
-}*/
+
+    public function setAuthor($author){
+        $this->author = $author;
+    }
+}

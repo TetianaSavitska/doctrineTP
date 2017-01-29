@@ -20,6 +20,11 @@ class Comment
     /** @Column(name="message", type="text") */
     private $message;
 
+    /** @ManyToOne(targetEntity="User") */
+    private $author;
+
+    //private $post;
+
     public function getId(){
         return $this->id;
     }
@@ -42,5 +47,13 @@ class Comment
 
     public function setMessage($message){
         $this->message = $message;
+    }
+
+    public function getAuthor(){
+        return $this->author;
+    }
+
+    public function setAuthor($author){
+        $this->author = $author;
     }
 }

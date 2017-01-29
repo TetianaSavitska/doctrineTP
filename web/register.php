@@ -11,7 +11,7 @@ if (isset($_POST['register']) ){
     $passwordHash = password_hash($password, PASSWORD_DEFAULT);
     $firstname = strip_tags($_POST['firstname']);
     $lastname = strip_tags($_POST['lastname']);
-    $birthDate = new \DateTime(strip_tags($_POST['birthDate']));
+    $birthDate = new DateTime(strip_tags($_POST['birthDate']));
     $description = strip_tags($_POST['description']);
 
     $user->setEmail($email);
@@ -96,11 +96,11 @@ if (isset($_POST['register']) ){
                                 <li>
                                     <a href="post.php">Home</a>
                                 </li>
-                                <li>
-                                    <a href="login.php"><span class="glyphicon glyphicon-user"></span></a>
+                                <li title="Login">
+                                    <a href="login.php"><span  class="glyphicon glyphicon-user"></span></a>
                                 </li>
-                                <li>
-                                    <a href="register.php"><span class="glyphicon glyphicon-log-in"></span></a>
+                                <li title="Sign Up">
+                                    <a href="register.php"><span  class="glyphicon glyphicon-log-in"></span></a>
                                 </li>
                             </ul>
                         </nav>

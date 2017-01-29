@@ -31,6 +31,8 @@ $comments = $entityManager->getRepository('ImieBook\Entity\Comment')->findBy(arr
     <meta name="generator" content="Bootply" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -65,7 +67,13 @@ $comments = $entityManager->getRepository('ImieBook\Entity\Comment')->findBy(arr
                             </form>
                             <ul class="nav navbar-nav">
                                 <li>
-                                    <a href="#">Home</a>
+                                    <a href="post.php">Home</a>
+                                </li>
+                                <li title="Login">
+                                    <a href="login.php"><span  class="glyphicon glyphicon-user"></span></a>
+                                </li>
+                                <li title="Sign Up">
+                                    <a href="register.php"><span  class="glyphicon glyphicon-log-in"></span></a>
                                 </li>
                             </ul>
                         </nav>

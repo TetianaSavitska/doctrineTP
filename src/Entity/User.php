@@ -17,7 +17,7 @@ class User
     /** @Column(name="email", type="string", length=200) */
     private $email;
 
-	/** @Column(name="password", type="string", length=50) */
+	/** @Column(name="password", type="string", length=255) */
     private $password;
 
     /** @Column(name="description", type="text") */

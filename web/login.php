@@ -1,5 +1,49 @@
 <?php
-// code here
+require "../vendor/autoload.php";
+require "../bootstrap.php";
+
+$error=null;
+session_start();
+
+//logout
+if (!empty($_SESSION['user'])){
+    unset($_SESSION['user']); 
+    //redirection
+    header("Location: login.php");
+}
+
+//traitement du fformulaire de connection
+//si le form est soumis...
+if(isset($_POST['login'])){
+
+    $username = $_POST['username'];
+
+    $user = $entityManager->getRepository('ImieBook\Entity\User')->findOneBy(['email'=> $username]);
+    $user = $entityManager->getRepository('ImieBook\Entity\User')->find(1);
+    if ($user != null){
+        //hache le mot de passe et le compare à celui de la bdd
+        if ( password_verify( $_POST['password'], $user->getPassword() ) ){
+            //connectez l'user en stockant une ou des infos dans la session. On vérifiera ces infos sur les pages à sécuriser.
+            $_SESSION['user'] = $user;
+
+            //$_COOKIE pour la lecture
+            //on stocke le token dans un cookie
+            //on ne devrait placer ce cookie que si une case est cochée
+            //pour l'instant, ce cookie ne sert à rien !!!
+            //setcookie("remember_me", $user->getToken(), strtotime("+ 6 months"), "/");
+            header("Location: post.php");
+        }
+        else {
+            //on garde ça vague pour ne pas donner d'infos aux méchants
+            $error = "Not valid username or password!";
+        }
+    }else{
+        $error = "Invalid username";
+    }
+    
+}
+
+
 ?>
 
 
@@ -12,6 +56,8 @@
     <meta name="generator" content="Bootply" />
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
     <link href="css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <!--[if lt IE 9]>
     <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
     <![endif]-->
@@ -48,11 +94,11 @@
                                 <li>
                                     <a href="post.php">Home</a>
                                 </li>
-                                <li>
-                                    <a href="login.php"><span class="glyphicon glyphicon-user"></span></a>
+                                <li title="Login">
+                                    <a href="login.php"><span  class="glyphicon glyphicon-user"></span></a>
                                 </li>
-                                <li>
-                                    <a href="#register.php"><span class="glyphicon glyphicon-log-in"></span></a>
+                                <li title="Sign Up">
+                                    <a href="register.php"><span  class="glyphicon glyphicon-log-in"></span></a>
                                 </li>
                             </ul>
                         </nav>
@@ -73,9 +119,11 @@
                                             <div class="form-group">
                                                 <input class="form-control" type="password" name="password" placeholder="password" />
                                             </div>
-                                            <button class="btn btn-primary pull-right" name="login" type="submit">Envoyer</button><ul class="list-inline"><li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li><li><a href=""><i class="glyphicon glyphicon-camera"></i></a></li><li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li></ul>
+                                            <button class="btn btn-primary pull-right" name="login" type="submit">Send</button><ul class="list-inline"><li><a href=""><i class="glyphicon glyphicon-upload"></i></a></li><li><a href=""><i class="glyphicon glyphicon-camera"></i></a></li><li><a href=""><i class="glyphicon glyphicon-map-marker"></i></a></li></ul>
                                         </form>
                                     </div>
+                                <?= isset($_POST['login']) ?  var_dump($user) : ""; ?>
+                                <p><?=$error == null ? "" : $error;?></p>
                                 </div>
                             </div><!--/row-->
                             <hr>
