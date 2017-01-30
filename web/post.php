@@ -1,8 +1,6 @@
 <?php
 
-require "../vendor/autoload.php";
 require "../bootstrap.php";
-session_start();
 
 //if update is set get the data to modify
 $button= "Post";
@@ -29,6 +27,7 @@ if( isset($_POST['post'])){
         $post->setSubject(htmlspecialchars($_POST['title']));
         $post->setMessage(htmlspecialchars($_POST['message']));
         $post->setDate(new DateTime());
+        $post->setAuthor($_SESSION['user']);
 
         $entityManager->persist($post);
         $entityManager->flush($post);
@@ -40,6 +39,7 @@ if( isset($_POST['post'])){
 if(isset($_GET['del']) && $_GET['del']){
     $id = htmlspecialchars($_GET['id']);
     $post = $entityManager->getRepository('ImieBook\Entity\Post')->find($id);
+    $comments = $entityManager->getRepository('ImieBook\Entity\Comment')->findByPost($post);
 
     $entityManager->remove($post);
     $entityManager->flush($post);
@@ -154,7 +154,7 @@ if(!empty($_GET) && !empty($_GET['search-word'])){
                                                 Link 
                                                 </a>
                                                 <h4><a href="comment.php?id=<?=$post->getId()?>"><?=$post->getSubject()?></a></h4>
-                                                <p> Posted by <?=$post->getAuthor()->getFirstname() . " " . $post->getAuthor()->getLastname() ?></p>
+                                                <p> Posted by <span class="author"><?=$post->getAuthor()->getFirstname() . " " . $post->getAuthor()->getLastname() ?></span></p>
                                                 <?=$post->getDate()->format('Y-m-d H:i:s');?>
                                             </div>
                                             <div class="panel-body">
@@ -169,6 +169,12 @@ if(!empty($_GET) && !empty($_GET['search-word'])){
                                                 </a>
                                                 <a href="post.php?id=<?=$post->getId()?>&del=true" class="btn btn-default btn-sm" >
                                                     <span class="glyphicon glyphicon-trash"></span>
+                                                </a>
+                                                <a href="post.php" class="btn btn-default btn-sm" title="Like">
+                                                    <span class="glyphicon glyphicon-thumbs-up"></span>
+                                                </a>
+                                                <a href="post.php" class="btn btn-default btn-sm" title="Dislike">
+                                                    <span class="glyphicon glyphicon-thumbs-down"></span>
                                                 </a>
                                             </div>
                                         </div>

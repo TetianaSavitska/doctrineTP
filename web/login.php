@@ -1,9 +1,8 @@
 <?php
-require "../vendor/autoload.php";
+
 require "../bootstrap.php";
 
 $error=null;
-session_start();
 
 //logout
 if (!empty($_SESSION['user'])){
@@ -18,12 +17,10 @@ if(isset($_POST['login'])){
 
     $username = $_POST['username'];
 
-    $user = $entityManager->getRepository('ImieBook\Entity\User')->findOneBy(['email'=> $username]);
-    $user = $entityManager->getRepository('ImieBook\Entity\User')->find(1);
+    $user = $entityManager->getRepository('ImieBook\Entity\User')->findOneByEmail($username);
     if ($user != null){
         //hache le mot de passe et le compare à celui de la bdd
         if ( password_verify( $_POST['password'], $user->getPassword() ) ){
-            //connectez l'user en stockant une ou des infos dans la session. On vérifiera ces infos sur les pages à sécuriser.
             $_SESSION['user'] = $user;
 
             //$_COOKIE pour la lecture
@@ -34,7 +31,6 @@ if(isset($_POST['login'])){
             header("Location: post.php");
         }
         else {
-            //on garde ça vague pour ne pas donner d'infos aux méchants
             $error = "Not valid username or password!";
         }
     }else{

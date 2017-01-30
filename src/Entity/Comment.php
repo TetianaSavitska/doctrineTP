@@ -2,7 +2,7 @@
 namespace ImieBook\Entity;
 
 /** 
-* @Entity 
+* @Entity(repositoryClass="ImieBook\Repository\CommentRepository")
 * @Table(name="comment")
 */
 class Comment
@@ -20,10 +20,14 @@ class Comment
     /** @Column(name="message", type="text") */
     private $message;
 
-    /** @ManyToOne(targetEntity="User") */
+    /** 
+    * @ManyToOne(targetEntity="ImieBook\Entity\User") 
+    * @JoinColumn(name="author_id", referencedColumnName="id")
+    */
     private $author;
 
-    //private $post;
+    /** @ManyToOne(targetEntity="ImieBook\Entity\Post", inversedBy="comments") */
+    private $post;
 
     public function getId(){
         return $this->id;
@@ -55,5 +59,13 @@ class Comment
 
     public function setAuthor($author){
         $this->author = $author;
+    }
+
+    public function getPost(){
+        return $this->post;
+    }
+
+    public function setPost($post){
+        $this->post = $post;
     }
 }

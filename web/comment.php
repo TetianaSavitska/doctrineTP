@@ -1,23 +1,66 @@
 <?php
 
-require "../vendor/autoload.php";
 require "../bootstrap.php";
 
+$post_id = htmlentities($_GET['id']);
+$post = $entityManager->getRepository('ImieBook\Entity\Post')->find($post_id);
+
+//add a comment
 if(isset($_POST['comment'])){ 
     if(!empty($_POST) && !empty($_POST['message'])){
         $comment = new ImieBook\Entity\Comment();
         $comment->setMessage($_POST['message']);
         $comment->setDate(new DateTime());
+        $comment->setAuthor($_SESSION['user']);
+        $comment->setPost($post);
 
         $entityManager->persist($comment);
         $entityManager->flush($comment);
     }
 }
 
-$id = htmlentities($_GET['id']);
-$post = $entityManager->getRepository('ImieBook\Entity\Post')->find($id);
+//delete a given comment
+if(isset($_GET['del']) && $_GET['del']){
+    $comment_id = htmlspecialchars($_GET['comment_id']);
+    $comment = $entityManager->getRepository('ImieBook\Entity\Comment')->find($comment_id);
 
-$comments = $entityManager->getRepository('ImieBook\Entity\Comment')->findBy(array(),['date'=> 'ASC']);
+    $entityManager->remove($comment);
+    $entityManager->flush($comment);
+}
+
+//like a comment
+if(isset($_GET['like']) && $_GET['like']){
+    $comment_id = htmlspecialchars($_GET['comment_id']);
+    $comment = $entityManager->getRepository('ImieBook\Entity\Comment')->find($comment_id);
+
+    $commentLike = new ImieBook\Entity\CommentLike();
+    $commentLike->setComment($comment);
+    $commentLike->setUser($_SESSION['user']);
+    $commentLike->setScore(1);
+    //$commentLike->like();
+
+    $entityManager->persist($commentLike);
+    $entityManager->flush($commentLike);
+}
+
+//dislike a comment
+if(isset($_GET['dislike']) && $_GET['dislike']){
+    $comment_id = htmlspecialchars($_GET['comment_id']);
+    $comment = $entityManager->getRepository('ImieBook\Entity\Comment')->find($comment_id);
+
+    $commentLike = new ImieBook\Entity\CommentLike();
+    $commentLike->setComment($comment);
+    $commentLike->setUser($_SESSION['user']);
+    $commentLike->dislike();
+
+    $entityManager->persist($commentLike);
+    $entityManager->flush($commentLike);
+}
+
+
+
+//$comments = $entityManager->getRepository('ImieBook\Entity\Comment')->findBy(array(),['date'=> 'ASC']);
+$comments = $entityManager->getRepository('ImieBook\Entity\Comment')->findByPost($post);
 
 ?>
 
@@ -103,8 +146,22 @@ $comments = $entityManager->getRepository('ImieBook\Entity\Comment')->findBy(arr
                                     <div class="col-sm-push-2 col-sm-8">
                                         <div class="panel panel-default">
                                             <div class="panel-body">
+                                                <span class="author"><?=$comment->getAuthor()->getFirstname() . " " . $comment->getAuthor()->getLastname() ?></span>
                                                 <?=$comment->getDate()->format('Y-m-d H:i:s')?><br/>
                                                 <?=$comment->getMessage()?>
+                                                <div>
+                                                    <a href="comment.php?id=<?=$post_id?>&comment_id=<?=$comment->getId()?>&like=true" class="btn btn-default btn-sm" >
+                                                        <span class="glyphicon glyphicon-thumbs-up"></span>
+                                                        <?php $commentLike = $entityManager->getRepository('ImieBook\Entity\CommentLike')->findOneByUserAndComment($_SESSION['user'], $comment); ?>
+                                                        <?= $commentLike != null ? $commentLike->getScore() : ""?>
+                                                    </a>
+                                                    <a href="comment.php?id=<?=$post_id?>&comment_id=<?=$comment->getId()?>&dislike=true" class="btn btn-default btn-sm" >
+                                                        <span class="glyphicon glyphicon-thumbs-down"></span>
+                                                    </a>
+                                                    <a href="comment.php?id=<?=$post_id?>&comment_id=<?=$comment->getId()?>&del=true" class="btn btn-default btn-sm pull-right" >
+                                                        <span class="glyphicon glyphicon-trash"></span>
+                                                    </a>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -112,7 +169,7 @@ $comments = $entityManager->getRepository('ImieBook\Entity\Comment')->findBy(arr
 
                                 <div class="col-sm-push-2 col-sm-8">
                                     <div class="well">
-                                        <form class="form-horizontal" role="form" method="POST" action="comment.php?id=<?=$id?>">
+                                        <form class="form-horizontal" role="form" method="POST" action="comment.php?id=<?=$post_id?>">
                                             <h4>Commenter</h4>
                                             <div class="form-group" style="padding:14px;">
                                                 <textarea class="form-control" name="message" placeholder="Message"></textarea>

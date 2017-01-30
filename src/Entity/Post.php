@@ -23,11 +23,14 @@ class Post
     /** @Column(name="message", type="text") */
     private $message;
 
-    /** @ManyToOne(targetEntity="User") */
+    /** 
+    * @ManyToOne(targetEntity="ImieBook\Entity\User") 
+    * @JoinColumn(name="author_id", referencedColumnName="id")
+    */
     private $author;
 
-    ///** @OneToMany(targetEntity="Comment", mappedBy="post") */
-    //private $comments;
+    /** @OneToMany(targetEntity="ImieBook\Entity\Comment", mappedBy="post", cascade={"remove"}) */
+    private $comments;
 
     /*public function __construct()
     {
@@ -72,5 +75,13 @@ class Post
 
     public function setAuthor($author){
         $this->author = $author;
+    }
+
+    public function getComments(){
+        return $this->comments;
+    }
+
+    public function setComment($comments){
+        $this->comments = $comments;
     }
 }

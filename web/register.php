@@ -1,6 +1,5 @@
 <?php
 
-require "../vendor/autoload.php";
 require "../bootstrap.php";
 
 if (isset($_POST['register']) ){

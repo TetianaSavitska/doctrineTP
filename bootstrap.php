@@ -12,7 +12,7 @@ $isDevMode = true;
 $dbParams=array(
 	'driver' => 'pdo_mysql',
 	'user' => 'root',
-	'password' => '',
+	'password' => 'imie',
 	'dbname' => 'doctrine_tp'
  	);
 
@@ -26,5 +26,8 @@ $config = Setup::createAnnotationMetadataConfiguration(array(__DIR__."/src"), $i
 // obtaining the entity manager
 $entityManager = EntityManager::create($dbParams, $config);
 
-/*$detachedEntity = unserialize($serializedEntity); // some detached entity
-$entity = $em->merge($detachedEntity);*/
+session_start();
+
+if (isset($_SESSION['user'])){
+	$_SESSION['user'] = $entityManager->merge($_SESSION['user']);
+}
