@@ -57,6 +57,36 @@ if(!empty($_GET) && !empty($_GET['search-word'])){
     $posts = $entityManager->getRepository('ImieBook\Entity\Post')->findBy(array(),['date'=> 'DESC']);  
 }
 
+//like a post
+if(isset($_GET['like']) && $_GET['like']){
+    $post_id = htmlspecialchars($_GET['id']);
+    $post = $entityManager->getRepository('ImieBook\Entity\Post')->find($post_id);
+
+    $postLike = new ImieBook\Entity\PostLike();
+    $postLike->setPost($post);
+    $postLike->setUser($_SESSION['user']);
+    $postLike->setScore(1);
+    //$commentLike->like();
+
+    $entityManager->persist($postLike);
+    $entityManager->flush($postLike);
+}
+
+//dislike a post
+if(isset($_GET['dislike']) && $_GET['dislike']){
+    $post_id = htmlspecialchars($_GET['id']);
+    $post = $entityManager->getRepository('ImieBook\Entity\Post')->find($post_id);
+
+    $postLike = new ImieBook\Entity\PostLike();
+    $postLike->setPost($post);
+    $postLike->setUser($_SESSION['user']);
+    $postLike->setScore(-1);
+
+    $entityManager->persist($postLike);
+    $entityManager->flush($postLike);
+}
+
+
 ?>
 
 
@@ -170,10 +200,10 @@ if(!empty($_GET) && !empty($_GET['search-word'])){
                                                 <a href="post.php?id=<?=$post->getId()?>&del=true" class="btn btn-default btn-sm" >
                                                     <span class="glyphicon glyphicon-trash"></span>
                                                 </a>
-                                                <a href="post.php" class="btn btn-default btn-sm" title="Like">
+                                                <a href="post.php?id=<?=$post->getId()?>&like=true" class="btn btn-default btn-sm" title="Like">
                                                     <span class="glyphicon glyphicon-thumbs-up"></span>
                                                 </a>
-                                                <a href="post.php" class="btn btn-default btn-sm" title="Dislike">
+                                                <a href="post.php?id=<?=$post->getId()?>&dislike=true" class="btn btn-default btn-sm" title="Dislike">
                                                     <span class="glyphicon glyphicon-thumbs-down"></span>
                                                 </a>
                                             </div>

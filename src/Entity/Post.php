@@ -29,7 +29,7 @@ class Post
     */
     private $author;
 
-    /** @OneToMany(targetEntity="ImieBook\Entity\Comment", mappedBy="post", cascade={"remove"}) */
+    /** @OneToMany(targetEntity="ImieBook\Entity\Comment", mappedBy="post", cascade={"persist", "remove"}) */
     private $comments;
 
     /*public function __construct()

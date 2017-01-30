@@ -4,7 +4,7 @@ namespace ImieBook\Repository;
 
 class CommentRepository extends \Doctrine\ORM\EntityRepository
 {
-	/*public function findByPost($post)
+	public function findByPost($post)
 	{
 		return $this
 			    ->createQueryBuilder('c')
@@ -13,7 +13,7 @@ class CommentRepository extends \Doctrine\ORM\EntityRepository
 		        ->setParameter('post', $post)
 		        ->getQuery()
 		        ->getResult();
-	}*/
+	}
 
 	public function findByUserAndComment($user, $comment)
 	{
