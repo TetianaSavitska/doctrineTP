@@ -103,4 +103,8 @@ class User
     public function setBirthDate($birthDate){
         $this->birthDate = $birthDate;
     }
+
+    public function setMyFriends($friends){
+        $this->friends = $friends;
+    }
 }

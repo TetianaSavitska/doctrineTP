@@ -12,7 +12,7 @@ $isDevMode = true;
 $dbParams=array(
 	'driver' => 'pdo_mysql',
 	'user' => 'root',
-	'password' => 'imie',
+	'password' => '',
 	'dbname' => 'doctrine_tp'
  	);
 

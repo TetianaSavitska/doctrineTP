@@ -17,7 +17,7 @@ class CommentLikeRepository extends \Doctrine\ORM\EntityRepository
 		        ->getOneOrNullResult();
 	}
 
-	public function countLikesByComment($comment)
+	public function countCommentLikes($comment)
 	{
 		return $this
 			    ->createQueryBuilder('cl')
@@ -30,7 +30,7 @@ class CommentLikeRepository extends \Doctrine\ORM\EntityRepository
 		        ->getSingleScalarResult();
 	}
 
-	public function countDislikesByComment($comment)
+	public function countCommentDislikes($comment)
 	{
 		return $this
 			    ->createQueryBuilder('cl')

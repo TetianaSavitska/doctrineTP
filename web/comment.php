@@ -152,13 +152,11 @@ $comments = $entityManager->getRepository('ImieBook\Entity\Comment')->findByPost
                                                 <div>
                                                     <a href="comment.php?id=<?=$post_id?>&comment_id=<?=$comment->getId()?>&like=true" class="btn btn-default btn-sm" >
                                                         <span class="glyphicon glyphicon-thumbs-up"></span>
-                                                        <?php $likes = $entityManager->getRepository('ImieBook\Entity\CommentLike')->countLikesByComment($comment); ?>
-                                                        <?php echo $likes ?>
+                                                        <?= $entityManager->getRepository('ImieBook\Entity\CommentLike')->countCommentLikes($comment); ?>
                                                     </a>
                                                     <a href="comment.php?id=<?=$post_id?>&comment_id=<?=$comment->getId()?>&dislike=true" class="btn btn-default btn-sm" >
                                                         <span class="glyphicon glyphicon-thumbs-down"></span>
-                                                        <?php $dislikes = $entityManager->getRepository('ImieBook\Entity\CommentLike')->countDislikesByComment($comment); ?>
-                                                        <?= "-".$dislikes ?>
+                                                        <?= "-". $entityManager->getRepository('ImieBook\Entity\CommentLike')->countCommentDislikes($comment); ?>
                                                     </a>
                                                     <a href="comment.php?id=<?=$post_id?>&comment_id=<?=$comment->getId()?>&del=true" class="btn btn-default btn-sm pull-right" >
                                                         <span class="glyphicon glyphicon-trash"></span>

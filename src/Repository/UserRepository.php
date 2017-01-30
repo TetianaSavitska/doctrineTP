@@ -15,4 +15,14 @@ class UserRepository extends \Doctrine\ORM\EntityRepository
 		        //getSingleResult() if doesn't find returns exception
 	}
 
+	public function findFriends($user)
+	{
+		return $this
+			    ->createQueryBuilder('u')
+		        ->where('u.myFriends=:friend')
+		        ->setParameter('friend', $user)
+		        ->getQuery()
+		        ->getResult(); 
+	}
+
 }

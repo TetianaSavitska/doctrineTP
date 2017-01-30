@@ -138,6 +138,9 @@ if(isset($_GET['dislike']) && $_GET['dislike']){
                                     <li>
                                         <a href="post.php">Home</a>
                                     </li>
+                                    <li>
+                                        <a href="friends.php">My friends</a>
+                                    </li>
                                     <li title="Logout">
                                         <a href="login.php"><span  class="glyphicon glyphicon-user"></span>Logout</a>
                                     </li>
@@ -202,9 +205,13 @@ if(isset($_GET['dislike']) && $_GET['dislike']){
                                                 </a>
                                                 <a href="post.php?id=<?=$post->getId()?>&like=true" class="btn btn-default btn-sm" title="Like">
                                                     <span class="glyphicon glyphicon-thumbs-up"></span>
+                                                    <?php $likes = $entityManager->getRepository('ImieBook\Entity\PostLike')->countPostLikes($post); ?>
+                                                    <?= $likes ?>
                                                 </a>
                                                 <a href="post.php?id=<?=$post->getId()?>&dislike=true" class="btn btn-default btn-sm" title="Dislike">
                                                     <span class="glyphicon glyphicon-thumbs-down"></span>
+                                                    <?php $dislikes = $entityManager->getRepository('ImieBook\Entity\PostLike')->countPostDislikes($post); ?>
+                                                    <?= "-". $dislikes ?>
                                                 </a>
                                             </div>
                                         </div>
